@@ -4,32 +4,44 @@ import logging
 import re
 import os
 import win32com.client as win32
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
 
 logger = logging.getLogger(__name__)
 
-def divide_text_by_min_words(text, min_words=100):
+def divide_text_by_min_words(text, min_words=100, overlap=50):
     """
-    Divise le texte en morceaux contenant au moins un nombre minimum de mots.
+    Divise le texte en morceaux contenant au moins un nombre minimum de mots,
+    avec un chevauchement pour conserver le contexte.
     
     :param text: Le texte à diviser.
     :param min_words: Le nombre minimum de mots par chunk.
+    :param overlap: Le nombre de mots à chevaucher entre les chunks.
     :return: Une liste de morceaux de texte.
     """
     words = text.split()
     chunks = []
-    current_chunk = []
+    i = 0
 
-    for word in words:
-        current_chunk.append(word)
-        if len(current_chunk) >= min_words:
-            chunks.append(' '.join(current_chunk))
-            current_chunk = []
-
-    # Ajouter le dernier chunk s'il contient des mots
-    if current_chunk:
-        chunks.append(' '.join(current_chunk))
+    while i < len(words):
+        end = i + min_words
+        chunk = words[i:end]
+        chunks.append(' '.join(chunk))
+        i += min_words - overlap
 
     return chunks
+
+def vectorize_chunks(chunks):
+    """
+    Vectorise les chunks de texte en utilisant langchain.
+    
+    :param chunks: Une liste de morceaux de texte.
+    :return: Une liste de vecteurs.
+    """
+    model_name = "sentence-transformers/all-mpnet-base-v2"
+    embeddings = HuggingFaceEmbeddings(model_name=model_name)
+    vectors = embeddings.embed_documents(chunks)
+    return vectors
 
 def filter_unnecessary_sequences(text):
     """
@@ -65,8 +77,35 @@ def process_word_file(file_path):
         
         text = ' '.join(full_text)
         text = filter_unnecessary_sequences(text)
-        chunks = divide_text_by_min_words(text)
-        return [{"file_name": file_path, "chunk": chunk} for chunk in chunks]
+        words = text.split()
+        chunks = []
+        current_chunk = []
+        overlap = 50
+
+        for word in words:
+            current_chunk.append(word)
+            if len(current_chunk) >= 100:
+                chunks.append({
+                    "file_name": file_path,
+                    "chunk": ' '.join(current_chunk)
+                })
+                current_chunk = current_chunk[-overlap:]  # Conserver les 50 derniers mots
+
+        # Ajouter le dernier chunk s'il contient des mots
+        if current_chunk:
+            chunks.append({
+                "file_name": file_path,
+                "chunk": ' '.join(current_chunk)
+            })
+
+        # Vectoriser les chunks et ajouter les vecteurs aux chunks
+        chunk_texts = [chunk["chunk"] for chunk in chunks]
+        vectors = vectorize_chunks(chunk_texts)
+        
+        for i, chunk in enumerate(chunks):
+            chunk["vector"] = vectors[i]
+
+        return chunks
     except Exception as e:
         logger.error(f"Error processing Word file: {e}")
         raise
@@ -108,6 +147,7 @@ def process_doc_file(file_path):
         logger.error(f"Error processing DOC file: {e}")
         raise
 
+
 def process_pdf_file(file_path):
     """
     Traite un fichier PDF et le divise en morceaux de texte basés sur les paragraphes.
@@ -121,6 +161,7 @@ def process_pdf_file(file_path):
         current_page = 1
         current_chunk = []
         chunks = []
+        overlap = 50
 
         for page_num, page in enumerate(doc, start=1):
             text = page.get_text("text")
@@ -135,7 +176,7 @@ def process_pdf_file(file_path):
                         "pages": f"{current_page}-{page_num}" if current_page != page_num else str(page_num),
                         "chunk": ' '.join(current_chunk)
                     })
-                    current_chunk = []
+                    current_chunk = current_chunk[-overlap:]  # Conserver les 50 derniers mots
                     current_page = page_num
 
         # Ajouter le dernier chunk s'il contient des mots
@@ -146,7 +187,30 @@ def process_pdf_file(file_path):
                 "chunk": ' '.join(current_chunk)
             })
 
+        # Vectoriser les chunks et ajouter les vecteurs aux chunks
+        chunk_texts = [chunk["chunk"] for chunk in chunks]
+        vectors = vectorize_chunks(chunk_texts)
+        
+        for i, chunk in enumerate(chunks):
+            chunk["vector"] = vectors[i]
+
         return chunks
     except Exception as e:
         logger.error(f"Error processing PDF file: {e}")
         raise
+    
+def process_file(file_path):
+    """
+    Traite un fichier en fonction de son type et le divise en morceaux de texte.
+
+    :param file_path: Le chemin du fichier.
+    :return: Une liste de morceaux de texte avec des informations sur le fichier.
+    """
+    if file_path.endswith('.pdf'):
+        return process_pdf_file(file_path)
+    elif file_path.endswith('.docx'):
+        return process_word_file(file_path)
+    elif file_path.endswith('.doc'):
+        return process_doc_file(file_path)
+    else:
+        raise ValueError("Unsupported file type")
