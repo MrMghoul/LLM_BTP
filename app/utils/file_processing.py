@@ -5,10 +5,16 @@ import re
 import os
 import win32com.client as win32
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from pymongo import MongoClient
+from app.core.config import MONGO_URI, MONGO_DB_NAME
+from bson import ObjectId
+from app.services.mongo_service import insert_chunks_to_mongodb, convert_objectid_to_str
 
 
 logger = logging.getLogger(__name__)
 
+
+    
 def divide_text_by_min_words(text, min_words=100, overlap=50):
     """
     Divise le texte en morceaux contenant au moins un nombre minimum de mots,
@@ -198,19 +204,29 @@ def process_pdf_file(file_path):
     except Exception as e:
         logger.error(f"Error processing PDF file: {e}")
         raise
-    
-def process_file(file_path):
+
+
+def process_file(file_path, collection_name="testing"):
     """
     Traite un fichier en fonction de son type et le divise en morceaux de texte.
 
     :param file_path: Le chemin du fichier.
+    :param collection_name: Nom de la collection MongoDB.
     :return: Une liste de morceaux de texte avec des informations sur le fichier.
     """
     if file_path.endswith('.pdf'):
-        return process_pdf_file(file_path)
+        chunks = process_pdf_file(file_path)
     elif file_path.endswith('.docx'):
-        return process_word_file(file_path)
+        chunks = process_word_file(file_path)
     elif file_path.endswith('.doc'):
-        return process_doc_file(file_path)
+        chunks = process_doc_file(file_path)
     else:
         raise ValueError("Unsupported file type")
+    
+    # Insérer les chunks dans MongoDB
+    insert_chunks_to_mongodb(chunks, collection_name)
+    
+    # Convertir les ObjectId en chaînes de caractères
+    chunks = convert_objectid_to_str(chunks)
+    
+    return chunks

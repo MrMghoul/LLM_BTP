@@ -1,7 +1,7 @@
 import os
 import shutil
 from fastapi import APIRouter, File, HTTPException, UploadFile
-from app.services.mongo_service import get_all_documents
+from app.services.mongo_service import get_all_documents, convert_objectid_to_str
 from app.utils.file_processing import process_file
 
 router = APIRouter()
@@ -11,7 +11,6 @@ async def list_documents():
     """Récupère tous les documents."""
     documents = await get_all_documents()
     return {"documents": documents}
-
 
 @router.post("/process-file-title/")
 async def process_file_title_endpoint(file: UploadFile = File(...)):
@@ -26,10 +25,13 @@ async def process_file_title_endpoint(file: UploadFile = File(...)):
             shutil.copyfileobj(file.file, buffer)
         
         # Traiter le fichier
-        chunks = process_file(temp_file_path)
+        chunks = process_file(temp_file_path, collection_name="testing")
         
         # Supprimer le fichier temporaire
         os.remove(temp_file_path)
+        
+        # Convertir les ObjectId en chaînes de caractères
+        chunks = convert_objectid_to_str(chunks)
         
         return {"chunks": chunks}
     except Exception as e:
