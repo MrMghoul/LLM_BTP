@@ -1,0 +1,22 @@
+# Use Python 3.12.5 as base image
+FROM python:3.12.5
+
+# Set working directory
+WORKDIR /src
+
+# Copy requirements first to leverage Docker cache
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application
+COPY app ./app
+COPY .env .
+
+# Expose backend port
+EXPOSE 8000
+
+# Make sure the Python path includes our application
+ENV PYTHONPATH=/src
+
+# Launch the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

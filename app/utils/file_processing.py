@@ -5,16 +5,17 @@ import re
 import os
 import win32com.client as win32
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from pymongo import MongoClient
-from app.core.config import MONGO_URI, MONGO_DB_NAME
-from bson import ObjectId
-from app.services.mongo_service import insert_chunks_to_mongodb, convert_objectid_to_str
+import datetime
+import subprocess
 
 
 logger = logging.getLogger(__name__)
 
 
-    
+
+#######################################################
+
+
 def divide_text_by_min_words(text, min_words=100, overlap=50):
     """
     Divise le texte en morceaux contenant au moins un nombre minimum de mots,
@@ -87,12 +88,16 @@ def process_word_file(file_path):
         chunks = []
         current_chunk = []
         overlap = 50
+        timestamp = datetime.datetime.now().isoformat()
+        file_name = os.path.basename(file_path)
 
         for word in words:
             current_chunk.append(word)
             if len(current_chunk) >= 100:
                 chunks.append({
-                    "file_name": file_path,
+                    "file_name": file_name,
+                    "pages": "Non trouvé",  # Par défaut pour les fichiers Word
+                    "timestamp": timestamp,
                     "chunk": ' '.join(current_chunk)
                 })
                 current_chunk = current_chunk[-overlap:]  # Conserver les 50 derniers mots
@@ -100,7 +105,9 @@ def process_word_file(file_path):
         # Ajouter le dernier chunk s'il contient des mots
         if current_chunk:
             chunks.append({
-                "file_name": file_path,
+                "file_name": file_name,
+                "pages": "Non trouvé",  # Par défaut pour les fichiers Word
+                "timestamp": timestamp,
                 "chunk": ' '.join(current_chunk)
             })
 
@@ -168,6 +175,8 @@ def process_pdf_file(file_path):
         current_chunk = []
         chunks = []
         overlap = 50
+        timestamp = datetime.datetime.now().isoformat()
+        file_name = os.path.basename(file_path)
 
         for page_num, page in enumerate(doc, start=1):
             text = page.get_text("text")
@@ -178,8 +187,9 @@ def process_pdf_file(file_path):
                 current_chunk.append(word)
                 if len(current_chunk) >= 100:
                     chunks.append({
-                        "file_name": file_path,
+                        "file_name": file_name,
                         "pages": f"{current_page}-{page_num}" if current_page != page_num else str(page_num),
+                        "timestamp": timestamp,
                         "chunk": ' '.join(current_chunk)
                     })
                     current_chunk = current_chunk[-overlap:]  # Conserver les 50 derniers mots
@@ -188,8 +198,9 @@ def process_pdf_file(file_path):
         # Ajouter le dernier chunk s'il contient des mots
         if current_chunk:
             chunks.append({
-                "file_name": file_path,
+                "file_name": file_name,
                 "pages": f"{current_page}-{page_num}" if current_page != page_num else str(page_num),
+                "timestamp": timestamp,
                 "chunk": ' '.join(current_chunk)
             })
 
@@ -205,28 +216,18 @@ def process_pdf_file(file_path):
         logger.error(f"Error processing PDF file: {e}")
         raise
 
-
-def process_file(file_path, collection_name="testing"):
+def process_file(file_path):
     """
     Traite un fichier en fonction de son type et le divise en morceaux de texte.
-
+    
     :param file_path: Le chemin du fichier.
-    :param collection_name: Nom de la collection MongoDB.
     :return: Une liste de morceaux de texte avec des informations sur le fichier.
     """
     if file_path.endswith('.pdf'):
-        chunks = process_pdf_file(file_path)
+        return process_pdf_file(file_path)
     elif file_path.endswith('.docx'):
-        chunks = process_word_file(file_path)
+        return process_word_file(file_path)
     elif file_path.endswith('.doc'):
-        chunks = process_doc_file(file_path)
+        return process_doc_file(file_path)
     else:
         raise ValueError("Unsupported file type")
-    
-    # Insérer les chunks dans MongoDB
-    insert_chunks_to_mongodb(chunks, collection_name)
-    
-    # Convertir les ObjectId en chaînes de caractères
-    chunks = convert_objectid_to_str(chunks)
-    
-    return chunks

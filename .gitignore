@@ -3,8 +3,8 @@ envllm/
 .env
 __pycache__/
 *.py[cod]
-
-test
+test/
+envllm/
 # Front end 
 
 # dependencies

@@ -9,6 +9,11 @@ spacy==3.8.3
 chromadb==0.3.22
 python-docx==0.8.11
 PyMuPDF==1.25.2
-pywin32==302
-pypandoc==1.6.3
-mammoth==1.4.0
+python-multipart==0.0.5
+pywin32==308
+langchain_community==0.3.17
+pydantic-settings == 2.7.1
+python-docx == 0.8.11
+langchain-openai == 0.3.6
+langchain-huggingface==0.2.2
+langchain-chroma==0.2.9
