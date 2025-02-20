@@ -3,7 +3,7 @@ llmenv/
 __pycache__/
 *.py[cod]
 test/
-
+envllm/
 # Front end 
 
 # dependencies
