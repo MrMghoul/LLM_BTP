@@ -9,5 +9,12 @@ collection = database[MONGO_COLLECTION_NAME]
 async def get_all_documents():
     """Récupère tous les documents de la collection."""
     documents = await collection.find().to_list(100)  # Limité à 100 documents
-    return [{"id": str(doc["_id"]), "name": doc["name"]} for doc in documents]
+    for doc in documents:
+        doc["id"] = str(doc["_id"])
+        del doc["_id"]
+    return documents
 
+async def insert_document(document):
+    """Insère un document dans la collection."""
+    result = await collection.insert_one(document)
+    return str(result.inserted_id)
