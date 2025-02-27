@@ -5,11 +5,12 @@ __pycache__/
 *.py[cod]
 test/
 envllm/
-node_modules
+node_module/
 # Front end 
 
 # dependencies
 frontend/node_modules
+
 frontend/.pnp
 .pnp.js
 
