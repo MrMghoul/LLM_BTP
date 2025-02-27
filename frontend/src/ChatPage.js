@@ -26,7 +26,10 @@ const ChatPage = () => {
     e.preventDefault();
     try {
       console.log("Sending query:", query); // Log the query being sent
-      const res = await axios.post('http://127.0.0.1:8000/api/chat/', { query });
+
+      // Inclure l'historique des messages dans la requête
+      const history = messages.map(msg => msg.text).join('\n');
+      const res = await axios.post('http://127.0.0.1:8000/api/chat/', { query, history });
       console.log("Response received:", res.data); // Log the response received
       setResponse(res.data.response);
   

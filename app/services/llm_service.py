@@ -6,7 +6,6 @@ from langchain.chains import LLMChain
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import SystemMessage, HumanMessage 
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 # Charger la clé API OpenAI depuis les variables d'environnement
@@ -18,16 +17,18 @@ llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     api_key=openai_api_key)
 
-async def ask_question(query: str) -> str:
+async def ask_question(query: str, history: str) -> str:
     """
     Pose une question au LLM et obtient une réponse.
     
     :param query: La question à poser.
+    :param history: L'historique des messages.
     :return: La réponse générée par le LLM.
     """
     # Créer les messages avec un message système initial
     messages = [
         SystemMessage(content="Vous êtes un assistant utile et concis."),
+        HumanMessage(content=history),
         HumanMessage(content=query)
     ]
     
@@ -43,17 +44,18 @@ async def ask_question(query: str) -> str:
     
     return response_text
 
-def generate_response(query: str, documents: list):
+def generate_response(query: str, documents: list, history: str):
     """
     Génère une réponse à partir du LLM en utilisant la requête et les documents fournis.
     
     :param query: La requête de l'utilisateur.
     :param documents: Les documents à utiliser pour générer la réponse.
+    :param history: L'historique des messages.
     :return: La réponse générée par le LLM.
     """
     # Créer un template de prompt
     prompt_template = ChatPromptTemplate.from_template(
-        "Question: {query}\n\nContext: {context}\n\nAnswer:"
+        "Question: {query}\n\nContext: {context}\n\nHistory: {history}\n\nAnswer:"
     )
     
     # Charger la chaîne de question-réponse
@@ -66,6 +68,6 @@ def generate_response(query: str, documents: list):
         raise ValueError("Le contexte est vide. Assurez-vous que les documents contiennent des données.")
     
     # Générer la réponse
-    response = qa_chain.run({"query": query, "context": context})
+    response = qa_chain.run({"query": query, "context": context, "history": history})
     
     return response

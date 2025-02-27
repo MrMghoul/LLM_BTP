@@ -16,7 +16,7 @@ body {
 
 .container {
     display: flex;
-    width: 900px; /* Largeur fixe modifiée */
+    width: 1200px; /* Largeur fixe modifiée */
     height: 650px; /* Hauteur fixe modifiée */
     background-color: white;
     border-radius: 10px;
@@ -56,10 +56,12 @@ body {
     border: 1px solid #ddd;
     margin-top: 10px;
     border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
 .chat-input {
     display: flex;
+    align-items: center; /* Aligner verticalement les éléments */
     margin-top: 10px;
 }
 
@@ -91,20 +93,32 @@ body {
 }
 
 .message {
-    margin: 10px 0;
+    margin: 10px 0; /* Conserve l'espace entre les messages */
     padding: 10px;
     border-radius: 5px;
+    max-width: 70%;
+}
+
+.message p {
+    margin: 0; /* Supprime les marges en haut et en bas des paragraphes */
 }
 
 .message.question {
-    background-color: #000000;
+    background-color: #3a3a3f;
     color: white;
-    text-align: left;
+    text-align: right;
+    align-self: flex-end;
+    border-top-right-radius: 0;
+    margin-left: auto; /* Déplacer les questions à droite */
 }
 
 .message.response {
-    background-color: #f1f8e9;
-    text-align: right;
+    background-color: #e9ecef;
+    color: black;
+    text-align: left;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+    margin-right: auto; /* Déplacer les réponses à gauche */
 }
 
 button.text-red-500 {
