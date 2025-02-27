@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 test/
 envllm/
+node_modules
 # Front end 
 
 # dependencies
