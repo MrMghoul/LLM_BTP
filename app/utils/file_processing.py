@@ -72,10 +72,29 @@ def process_word_file(file_path):
     try:
         doc = Document(file_path)
         full_text = []
+
         for para in doc.paragraphs:
             if para.text.strip() == "":
                 continue
             full_text.append(para.text)
+
+        # Récupérer le texte des tableaux
+        for table_index, table in enumerate(doc.tables):
+            table_content = []
+            for row in table.rows:
+                row_content = []
+                for cell in row.cells:
+                    cell_text = cell.text.strip()
+                    if cell_text:
+                        row_content.append(cell_text)
+                if row_content:
+                    table_content.append(' | '.join(row_content))
+            if table_content:
+                full_text.append(f"Table {table_index + 1}: " + ' || '.join(table_content))
+                print(f"Table {table_index + 1}:")
+                for row in table_content:
+                    print(row)
+        
         
         # Détecter les images
         for rel in doc.part.rels.values():

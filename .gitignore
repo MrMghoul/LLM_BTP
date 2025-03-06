@@ -3,6 +3,7 @@ llmenv/
 __pycache__/
 *.py[cod]
 test/
+uploads/
 
 # Front end 
 

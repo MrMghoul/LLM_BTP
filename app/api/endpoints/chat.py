@@ -35,6 +35,6 @@ async def ask(request: QueryRequest):
     query = request.query
     
     # Poser la question au LLM
-    response = ask_question(query)
+    response = await ask_question(query)
     
     return {"question": query, "response": response}
