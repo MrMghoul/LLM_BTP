@@ -1,0 +1,150 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(80vh - 40px); /* Hauteur ajustée pour inclure la marge */
+    background-color: #f0f0f0;
+    overflow: hidden; /* Empêche le défilement */
+    padding: 80px 0; /* Ajoute une marge en haut et en bas */
+}
+
+.container {
+    display: flex;
+    width: 1200px; /* Largeur fixe modifiée */
+    height: 650px; /* Hauteur fixe modifiée */
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 30px 0; /* Ajoute une marge en haut et en bas */
+}
+.sidebar {
+    width: 30%;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
+}
+
+.chat-container {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
+}
+
+.chat-header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center; /* Aligner verticalement les éléments */
+    margin-top: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-input button:hover {
+    background-color: #555;
+}
+
+.response {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.message {
+    margin: 10px 0; /* Conserve l'espace entre les messages */
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+}
+
+.message p {
+    margin: 0; /* Supprime les marges en haut et en bas des paragraphes */
+}
+
+.message.question {
+    background-color: #3a3a3f;
+    color: white;
+    text-align: right;
+    align-self: flex-end;
+    border-top-right-radius: 0;
+    margin-left: auto; /* Déplacer les questions à droite */
+}
+
+.message.response {
+    background-color: #e9ecef;
+    color: black;
+    text-align: left;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+    margin-right: auto; /* Déplacer les réponses à gauche */
+}
+
+button.text-red-500 {
+    background: none; /* Supprimer le background */
+    border: none; /* Supprimer la bordure */
+    cursor: pointer;
+}
+
+button.text-red-500:hover {
+    color: #ff0000; /* Changer la couleur au survol */
+}
+
+.add-conversation-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #4CAF50; /* Couleur de fond verte */
+    color: white; /* Couleur du texte blanche */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+}
+
+.add-conversation-button:hover {
+    background-color: #45a049; /* Couleur de fond au survol */
+}
