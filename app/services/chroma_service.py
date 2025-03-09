@@ -13,6 +13,9 @@ def store_document_chunks(file_path: str):
     """
     # Obtenir les chunks du document
     chunks = process_file(file_path)
+    if isinstance(chunks, dict) and chunks.get("status") == "error":
+        raise ValueError(chunks["message"])
+
 
     # Ajouter les chunks à ChromaDB
     for chunk in chunks:

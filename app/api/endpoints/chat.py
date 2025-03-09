@@ -8,6 +8,7 @@ router = APIRouter()
 
 class QueryRequest(BaseModel):
     query: str
+    history: str
 
 @router.post("/chat/")
 async def chat(request: QueryRequest):
@@ -15,6 +16,7 @@ async def chat(request: QueryRequest):
     Endpoint pour interroger le LLM avec une question et obtenir une réponse.
     """
     query = request.query
+    history = request.history
     
     # Rechercher les documents dans ChromaDB
     documents = search_documents(query)
@@ -23,7 +25,7 @@ async def chat(request: QueryRequest):
         raise HTTPException(status_code=404, detail="No documents found for the query.")
     
     # Générer une réponse à partir du LLM
-    response = generate_response(query, documents)
+    response = await generate_response(query, documents, history)
     
     return {"query": query, "response": response}
 
@@ -35,6 +37,6 @@ async def ask(request: QueryRequest):
     query = request.query
     
     # Poser la question au LLM
-    response = await ask_question(query)  # Utilisez await ici
+    response = await ask_question(query)
     
     return {"question": query, "response": response}

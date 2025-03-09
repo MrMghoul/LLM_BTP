@@ -17,3 +17,5 @@ python-docx == 0.8.11
 langchain-openai == 0.3.6
 langchain-huggingface==0.2.2
 langchain-chroma==0.2.9
+openpyxl==3.1.5
+nltk==3.9.1
