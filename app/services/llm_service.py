@@ -90,11 +90,11 @@ async def generate_response(query: str, documents: list, history: str) -> str:
     
     messages = [
         SystemMessage(content="Vous êtes un assistant utile et concis."),
-        SystemMessage(content=history_token),
+        SystemMessage(content=history),
         SystemMessage(content=context),
         SystemMessage(content=f"Métadonnées: {metadata}"),
         SystemMessage(content=f"Pages: {page}"),
-        HumanMessage(content=query_token)
+        HumanMessage(content=query)
     ]
 
     logger.info(f"Envoyer au LLM: ")
