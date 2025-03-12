@@ -16,4 +16,5 @@ pydantic-settings == 2.7.1
 python-docx == 0.8.11
 langchain-community == 0.3.17
 langchain-openai == 0.3.6
+nltk == 3.9.1
 

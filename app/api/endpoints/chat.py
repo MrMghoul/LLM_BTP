@@ -1,14 +1,25 @@
 import os
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from app.services.chroma_service import search_documents
-from app.services.llm_service import ask_question, generate_response
+from app.services.llm_service import ask_question, generate_response, summarize_history
 
 router = APIRouter()
 
 class QueryRequest(BaseModel):
     query: str
     history: str
+
+
+class HistoryRequest(BaseModel):
+    history: str
+
+@router.post("/summarize_history")
+async def summarize_history_endpoint(request: HistoryRequest):
+    history = request.history
+    summary = await summarize_history(history)
+    return {"summary": summary}
+
 
 @router.post("/chat/")
 async def chat(request: QueryRequest):

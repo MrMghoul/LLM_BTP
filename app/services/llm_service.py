@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # Charger la clé API OpenAI depuis les variables d'environnement
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-MAX_HISTORY_LENGTH = 10000
+MAX_HISTORY_LENGTH = 100
 
 # Initialiser le modèle OpenAI
 llm = ChatOpenAI(
@@ -58,6 +58,27 @@ async def ask_question(query: str, history: str) -> str:
     return response_text
 
 
+async def summarize_history(history: str) -> str:
+    """
+    Génère un résumé de l'historique pour réduire sa taille.
+    
+    :param history: L'historique des messages précédents.
+    :return: Un résumé de l'historique.
+    """
+    messages = [
+        SystemMessage(content="Vous êtes un assistant qui résume des textes en gardant les information les plus importante."),
+        HumanMessage(content=f"Résumé cet historique: {history}")
+    ]
+    
+    logger.info(f"Envoyer au LLM pour résumé: {messages}")
+    
+    response = await llm.agenerate([messages])
+    summary = response.generations[0][0].text
+    
+    logger.info(f"Résumé de l'historique: {summary}")
+    
+    return summary
+
 
 async def generate_response(query: str, documents: list, history: str) -> str:
     """
@@ -70,7 +91,8 @@ async def generate_response(query: str, documents: list, history: str) -> str:
     """
 
     if len(history) > MAX_HISTORY_LENGTH:
-        history = history[-MAX_HISTORY_LENGTH:]
+        #history = history[-MAX_HISTORY_LENGTH:]
+        history = await summarize_history(history)
 
 
     context = "\n\n".join([doc["content"] for doc in documents])
@@ -92,8 +114,8 @@ async def generate_response(query: str, documents: list, history: str) -> str:
         SystemMessage(content="Vous êtes un assistant utile et concis."),
         SystemMessage(content=history),
         SystemMessage(content=context),
-        SystemMessage(content=f"Métadonnées: {metadata}"),
-        SystemMessage(content=f"Pages: {page}"),
+        SystemMessage(content=f"Voici les nom des fichiers : {metadata}"),
+        SystemMessage(content=f"Voici les Pages mentionnée : {page}"),
         HumanMessage(content=query)
     ]
 
@@ -107,9 +129,11 @@ async def generate_response(query: str, documents: list, history: str) -> str:
     print("\n")
     logger.info(f"Pages: {page}")
     print("\n")
-    logger.info(f"History: {history_sw}")
+    logger.info(f"History résumé: {history}")
     print("\n")
-    logger.info(f"Query: {query_sw}")
+    logger.info(f"History: {history_token}")
+    print("\n")
+    logger.info(f"Query: {query_token}")
     print("\n")
     
     # Générer la réponse
