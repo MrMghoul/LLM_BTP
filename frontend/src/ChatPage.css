@@ -117,11 +117,14 @@ body {
 .message.user {
     text-align: right;
     background-color: #e0f7fa;
+    margin-left: 800px; /* Espace vide à gauche pour les questions */
 }
 
 .message.bot {
     text-align: left;
     background-color: #f1f8e9;
+    margin-right: 200px; /* Espace vide à droite pour les réponses */
+    line-height: 1.2; /* Ajuster l'interligne pour les longs paragraphes */
 }
 
 .chat-input {
