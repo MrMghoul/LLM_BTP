@@ -1,0 +1,210 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #8a8888; /* Changer le fond du body en noir */
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.dark-mode-toggle-outside {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.dark-mode-toggle-outside:hover {
+    background-color: #0056b3;
+}
+
+.chat-container {
+    display: flex;
+    max-width: 1600px;
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.sidebar {
+    width: 250px;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.add-conversation-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.add-conversation-button:hover {
+    background-color: #0056b3;
+}
+
+.conversation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.conversation-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.conversation-item:hover {
+    background-color: #f0f0f0;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    float: right;
+}
+
+.chat-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.chat-header {
+    margin-bottom: 20px;
+}
+
+.chat-messages {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.message.user {
+    text-align: right;
+    background-color: #e0f7fa;
+}
+
+.message.bot {
+    text-align: left;
+    background-color: #f1f8e9;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.chat-input input[type="file"] {
+    display: none;
+}
+
+.chat-input label {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+}
+
+.dark-mode {
+    background-color: #000; /* Changer le fond du body en noir pour le mode sombre */
+    color: #fff;
+}
+
+.dark-mode .chat-container {
+    background-color: #333; /* Changer le fond de l'application en gris */
+}
+
+.dark-mode .chat-messages {
+    background-color: #333; /* Changer le fond des messages en gris */
+}
+
+.dark-mode .message.user {
+    background-color: #444;
+    border-color: #555;
+}
+
+.dark-mode .message.bot {
+    background-color: #555;
+    border-color: #666;
+}
+
+.dark-mode .add-conversation-button,
+.dark-mode .dark-mode-toggle,
+.dark-mode .chat-input label,
+.dark-mode .chat-input button {
+    background-color: #444; /* Changer le fond des boutons en gris */
+    color: #fff;
+}
+
+.dark-mode .add-conversation-button:hover,
+.dark-mode .dark-mode-toggle:hover,
+.dark-mode .chat-input button:hover {
+    background-color: #555; /* Changer le fond des boutons au survol en gris plus clair */
+}
+
+.dark-mode .dark-mode-toggle-outside {
+    background-color: #000; /* Changer le fond du bouton extérieur en noir */
+    color: #fff;
+}
+
+.dark-mode .dark-mode-toggle-outside:hover {
+    background-color: #222; /* Changer le fond du bouton extérieur au survol en noir plus clair */
+}
