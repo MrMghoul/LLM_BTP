@@ -45,6 +45,28 @@ body {
     width: 250px;
     padding: 20px;
     border-right: 1px solid #ddd;
+    position: relative;
+}
+
+.sidebar::before {
+    content: "";
+    position: absolute;
+    top: -61%;
+    left: -12%;
+    width: 100%;
+    height: 100%;
+    background: url('C:/Users/Skyzo/Desktop/Projet probtp/LLM_BTP/frontend/src/logo.png') no-repeat center center;
+    background-size: contain;
+    opacity: 5; /* Rendre le logo transparent */
+    z-index: -1; /* Placer le logo derrière le contenu */
+}
+
+.dark-mode .sidebar::before {
+    background: url('C:/Users/Skyzo/Desktop/Projet probtp/LLM_BTP/frontend/src/logo-white.png') no-repeat center center;
+    background-size: contain;
+    opacity: 2; /* Rendre le logo transparent */
+    z-index: 1 ; /* Placer le logo derrière le contenu */
+    pointer-events: none; /* Permettre les clics à travers le logo */
 }
 
 .add-conversation-button {
@@ -117,14 +139,50 @@ body {
 .message.user {
     text-align: right;
     background-color: #e0f7fa;
-    margin-left: 800px; /* Espace vide à gauche pour les questions */
+    margin-left: 600px; /* Réduire l'espace vide à gauche pour les questions */
+    font-weight: bold;
+    font-style: normal;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    position: relative;
+    transform: translateX(-50px); /* Déplacer l'ensemble vers la gauche */
+}
+
+.message.user::after {
+    content: "🙋";
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    transform: translateY(-50%);
+    background-color: #e0f7fa;
+    border-radius: 50%;
+    padding: 5px;
 }
 
 .message.bot {
     text-align: left;
     background-color: #f1f8e9;
-    margin-right: 200px; /* Espace vide à droite pour les réponses */
-    line-height: 1.2; /* Ajuster l'interligne pour les longs paragraphes */
+    margin-right: 200px; /* Réduire l'espace vide à droite pour les réponses */
+    line-height: 1.2;
+    font-weight: bold;
+    font-style: normal;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    position: relative;
+    transform: translateX(50px); /* Déplacer l'ensemble vers la droite */
+}
+
+.message.bot::after {
+    content: "🤖";
+    position: absolute;
+    top: 50%;
+    left: -40px;
+    transform: translateY(-50%);
+    background-color: #f1f8e9;
+    border-radius: 50%;
+    padding: 5px;
 }
 
 .chat-input {
@@ -204,10 +262,11 @@ body {
 }
 
 .dark-mode .dark-mode-toggle-outside {
-    background-color: #000; /* Changer le fond du bouton extérieur en noir */
-    color: #fff;
+    background-color: #fff; /* Changer le fond du bouton en mode sombre */
+    color: #000; /* Changer la couleur du texte en mode sombre */
+    border: 1px solid #ccc; /* Ajouter une bordure en mode sombre */
 }
 
 .dark-mode .dark-mode-toggle-outside:hover {
-    background-color: #222; /* Changer le fond du bouton extérieur au survol en noir plus clair */
+    background-color: #f0f0f0; /* Changer le fond du bouton au survol en mode sombre */
 }
