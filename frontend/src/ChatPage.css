@@ -153,11 +153,12 @@ body {
     content: "🙋";
     position: absolute;
     top: 50%;
-    right: -40px;
+    right: -60px;
     transform: translateY(-50%);
     background-color: #e0f7fa;
     border-radius: 50%;
-    padding: 5px;
+    padding: 10px;
+    font-size: 30px; /* Augmenter la taille de l'émoji */
 }
 
 .message.bot {
@@ -178,11 +179,12 @@ body {
     content: "🤖";
     position: absolute;
     top: 50%;
-    left: -40px;
+    left: -55px;
     transform: translateY(-50%);
     background-color: #f1f8e9;
     border-radius: 50%;
-    padding: 5px;
+    padding: 10px;
+    font-size: 28px; /* Augmenter la taille de l'émoji */
 }
 
 .chat-input {
