@@ -33,47 +33,51 @@ const ChatPage = () => {
       if (file) {
         formData.append('file', file);
       }
-  
+
       console.log('Sending query to API:', query);
       console.log('Sending history to API:', messages);
       if (file) {
         console.log('Sending file to API:', file.name);
       }
-  
+
       const res = await axios.post('http://127.0.0.1:8000/api/chat/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       console.log('Received response from API:', res.data.response);
-  
-      const newMessages = [...messages, { type: 'user', text: query }, { type: 'bot', text: res.data.response }];
+
+      const newMessages = [
+        ...messages, 
+        { type: 'user', text: query, fileName: file ? file.name : null }, 
+        { type: 'bot', text: res.data.response }
+      ];
       setResponse(res.data.response);
       setMessages(newMessages);
       setQuery('');
       setFile(null);
-  
+
       if (selectedConversation) {
         // Mettre à jour la conversation existante
-        const updatedConversation = { ...selectedConversation, query, response: res.data.response, messages: newMessages };
+        const updatedConversation = { ...selectedConversation, query, response: res.data.response, messages: newMessages, chunks: res.data.chunks };
         console.log('Updating conversation in MongoDB:', updatedConversation);
         console.log('Selected conversation ID:', selectedConversation.id);
         await axios.put(`http://127.0.0.1:8000/api/conversations/${selectedConversation.id}`, updatedConversation);
       } else {
         // Ajouter une nouvelle conversation
-        const newConversation = { query, response: res.data.response, messages: newMessages };
+        const newConversation = { query, response: res.data.response, messages: newMessages, chunks: res.data.chunks };
         console.log('Saving conversation to MongoDB:', newConversation);
         const response = await axios.post('http://127.0.0.1:8000/api/conversations/', newConversation);
         setSelectedConversation({ ...newConversation, id: response.data.id });
         setConversations([...conversations, { ...newConversation, id: response.data.id }]); // Ajouter la nouvelle conversation à la liste
       }
-  
+
     } catch (error) {
       console.error('Error sending query:', error);
     }
   };
-  
+
   const handleAddConversation = () => {
     setSelectedConversation(null); // Réinitialiser la conversation sélectionnée
     setMessages([]);
@@ -129,6 +133,7 @@ const ChatPage = () => {
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.type}`}>
                 <p>{msg.text}</p>
+                {msg.fileName && <p className="file-name">📎 {msg.fileName}</p>}
               </div>
             ))}
           </div>

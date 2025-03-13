@@ -1,9 +1,7 @@
 from app.core.database import database
 from app.core.config import MONGO_COLLECTION_NAME
 from bson import ObjectId
-import logging
 
-logger = logging.getLogger(__name__)
 
 # Récupérer la collection "documents"
 collection = database[MONGO_COLLECTION_NAME]
@@ -34,16 +32,12 @@ async def get_all_conversations():
 
 async def insert_conversation(conversation):
     """Insère une conversation dans la collection."""
-    logger.info(f"Inserting conversation into MongoDB: {conversation}")
     result = await conversation_collection.insert_one(conversation)
-    logger.info(f"Inserted conversation ID: {result.inserted_id}")
     return str(result.inserted_id)
 
 async def update_conversation(conversation_id, conversation):
     """Met à jour une conversation dans la collection."""
-    logger.info(f"Updating conversation in MongoDB: {conversation}")
     result = await conversation_collection.update_one({"_id": ObjectId(conversation_id)}, {"$set": conversation})
-    logger.info(f"Updated conversation count: {result.modified_count}")
     return result.modified_count
 
 async def delete_conversation(conversation_id):

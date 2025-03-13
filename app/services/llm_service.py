@@ -88,12 +88,12 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
     
     messages = [
         SystemMessage(content="Vous êtes un assistant utile et concis."),
-        SystemMessage(content=history),
-        SystemMessage(content=context),  # Inclure le contexte des documents
-        SystemMessage(content=f"Métadonnées: {metadata}"),
+        SystemMessage(content=f"Voici l'historique de la conversation: {history}"),
+        SystemMessage(content=f"Voici les documents en rapport avec la demande de l'utilisateur: {context}"),
+        SystemMessage(content=f"Le nom des fichiers: {metadata}"),
         SystemMessage(content=f"Pages: {page}"),
-        SystemMessage(content=f"Folder: {folder_chunks}"),
-        SystemMessage(content=f"Query: {query}"),
+        SystemMessage(content=f"Voici le document uploadé: {folder_chunks}"),
+        SystemMessage(content=f"Voici la demande de l'utilisateur: {query}"),
     ]
 
     # Ajouter les chunks de fichier comme un nouveau message système
@@ -106,14 +106,14 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
     # Loguer les messages envoyés au LLM
     logger.info(f"Envoyer au LLM: {messages}")
     print('/n/n')
-    logger.info(f"Contexte: {context}")
-    print('/n/n')
-    logger.info(f"Métadonnées: {metadata}")
-    print('/n/n')
-    logger.info(f"Pages: {page}")
-    print('/n/n')
-    logger.info(f"History: {history_sw}")
-    print('/n/n')
+    # # logger.info(f"Contexte: {context}")
+    # # print('/n/n')
+    # logger.info(f"Métadonnées: {metadata}")
+    # print('/n/n')
+    # logger.info(f"Pages: {page}")
+    # print('/n/n')
+    # logger.info(f"History: {history_sw}")
+    # print('/n/n')
     logger.info(f"folder_chunks: {folder_chunks}")
     print('/n/n')
     logger.info(f"Query: {query_sw}")

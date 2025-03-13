@@ -6,6 +6,12 @@ body {
     background-color: #8a8888;
 }
 
+.file-name {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+  }
+  
 .logo-light {
     content: "";
     position: absolute;
