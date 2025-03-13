@@ -24,6 +24,12 @@ def store_document_chunks(file_path: str):
 
     # Ajouter les chunks à ChromaDB
     for chunk in chunks:
+        # Vérifier si le chunk existe déjà dans la base de données
+        existing_chunks = chroma_db.similarity_search(chunk["chunk"], k=1)
+        if existing_chunks and existing_chunks[0].page_content == chunk["chunk"]:
+            # Supprimer le chunk existant
+            chroma_db.delete_text(existing_chunks[0].id)
+
         metadata = {
             "file_name": chunk["file_name"],
             "pages": chunk["pages"],
@@ -37,6 +43,15 @@ def store_document_chunks(file_path: str):
     chroma_db.persist()  # Sauvegarde des changements
 
     return chunks  # Retourne les données stockées
+
+
+def get_all_documents():
+    """Récupère tous les documents dans ChromaDB."""
+    results = chroma_db.similarity_search("", k=1000)  # Utiliser une recherche avec une chaîne vide pour récupérer tous les documents
+    return [{"file_name": doc.metadata["file_name"], 
+             "page": doc.metadata["pages"],
+             "timestamp": doc.metadata["timestamp"],
+             "content": doc.page_content} for doc in results]
 
 def add_document_chunk(file_name: str, page: str, chunk_text: str):
     """Ajoute un chunk de document dans ChromaDB."""
