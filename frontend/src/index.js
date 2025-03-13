@@ -104,6 +104,7 @@ const ChatPage = () => {
 
   return (
     <div className={`app-container ${darkMode ? 'dark-mode' : ''}`}>
+      <div className={darkMode ? 'logo-dark' : 'logo-light'}></div>
       <button className="dark-mode-toggle-outside" onClick={toggleDarkMode}>
         {darkMode ? 'Mode Clair' : 'Mode Sombre'}
       </button>

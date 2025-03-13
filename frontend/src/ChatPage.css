@@ -6,6 +6,32 @@ body {
     background-color: #8a8888;
 }
 
+.logo-light {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 130px; /* Ajuster la position à gauche */
+    width: 350px; /* Augmenter la taille selon vos besoins */
+    height: 250px; /* Augmenter la taille selon vos besoins */
+    background: url('./logo.png') no-repeat center center;
+    background-size: contain;
+    opacity: 5;
+    pointer-events: none;
+}
+
+.logo-dark {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 150px; /* Ajuster la position à gauche */
+    width: 300px; /* Augmenter la taille selon vos besoins */
+    height: 200px; /* Augmenter la taille selon vos besoins */
+    background: url('./logo-white.png') no-repeat center center;
+    background-size: contain;
+    opacity: 5;
+    pointer-events: none;
+}
+
 .app-container {
     display: flex;
     flex-direction: column;
@@ -13,7 +39,9 @@ body {
     justify-content: center;
     min-height: 95vh;
     padding: 20px;
+    position: relative; /* Ajouté pour positionner les logos */
 }
+
 
 .dark-mode-toggle-outside {
     position: fixed;
@@ -25,6 +53,7 @@ body {
     border: none;
     cursor: pointer;
     border-radius: 4px;
+    margin-bottom: 20px;
 }
 
 .dark-mode-toggle-outside:hover {
@@ -48,28 +77,6 @@ body {
     padding: 20px;
     border-right: 1px solid #ddd;
     position: relative;
-}
-
-.sidebar::before {
-    content: "";
-    position: absolute;
-    top: -61%;
-    left: -12%;
-    width: 100%;
-    height: 100%;
-    background: url('C:/Users/Skyzo/Desktop/Projet probtp/LLM_BTP/frontend/src/logo.png') no-repeat center center;
-    background-size: contain;
-    opacity: 5;
-    z-index: -1;
-    pointer-events: none;
-}
-
-.dark-mode .sidebar::before {
-    background: url('C:/Users/Skyzo/Desktop/Projet probtp/LLM_BTP/frontend/src/logo-white.png') no-repeat center center;
-    background-size: contain;
-    opacity: 5;
-    z-index: 1;
-    pointer-events: none;
 }
 
 .add-conversation-button {
@@ -288,6 +295,7 @@ body {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid #ddd;
+        margin-top: 20px; /* Ajouter un espace entre le logo et la barre latérale */
     }
 
     .chat-content {
@@ -311,17 +319,26 @@ body {
     .message.bot::after {
         left: -30px;
     }
+
+    .logo-light, .logo-dark {
+        top: 10px;
+        left: 10px;
+        width: 200px;
+        height: 150px;
+    }
 }
 
 @media (max-width: 768px) {
     .chat-container {
         flex-direction: column; /* Disposition en colonne pour les petits écrans */
+        margin-top: 60px; /* Ajouter une marge en haut */
     }
 
     .sidebar {
-        width: 100%;
+        width: 94%;
         border-right: none;
         border-bottom: 1px solid #ddd;
+        margin-top: 4%; /* Ajouter un espace entre le logo et la barre latérale */
     }
 
     .chat-content {
@@ -345,6 +362,13 @@ body {
     .message.bot::after {
         left: -20px;
     }
+
+    .logo-light, .logo-dark {
+        top: 5px;
+        left: 5px;
+        width: 150px;
+        height: 100px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -356,6 +380,7 @@ body {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid #ddd;
+        margin-top: 20px; /* Ajouter un espace entre le logo et la barre latérale */
     }
 
     .chat-content {
@@ -378,5 +403,12 @@ body {
 
     .message.bot::after {
         left: -10px;
+    }
+
+    .logo-light, .logo-dark {
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 75px;
     }
 }
