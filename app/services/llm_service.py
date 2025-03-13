@@ -144,5 +144,5 @@ async def generate_response(query: str, documents: list, history: str) -> str:
     print("\n")
     #Afficher un pas de ligne
     
-    
+    # Retourner la réponse générée
     return response_text
