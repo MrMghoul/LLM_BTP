@@ -1,8 +1,9 @@
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #8a8888; /* Changer le fond du body en noir */
+    background-color: #8a8888;
 }
 
 .app-container {
@@ -10,7 +11,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 95vh;
     padding: 20px;
 }
 
@@ -32,6 +33,7 @@ body {
 
 .chat-container {
     display: flex;
+    flex-direction: row; /* Par défaut, disposition en ligne pour les grands écrans */
     max-width: 1600px;
     width: 100%;
     margin: 20px;
@@ -42,7 +44,7 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 250px; /* Largeur fixe pour les grands écrans */
     padding: 20px;
     border-right: 1px solid #ddd;
     position: relative;
@@ -57,16 +59,17 @@ body {
     height: 100%;
     background: url('C:/Users/Skyzo/Desktop/Projet probtp/LLM_BTP/frontend/src/logo.png') no-repeat center center;
     background-size: contain;
-    opacity: 5; /* Rendre le logo transparent */
-    z-index: -1; /* Placer le logo derrière le contenu */
+    opacity: 5;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .dark-mode .sidebar::before {
     background: url('C:/Users/Skyzo/Desktop/Projet probtp/LLM_BTP/frontend/src/logo-white.png') no-repeat center center;
     background-size: contain;
-    opacity: 2; /* Rendre le logo transparent */
-    z-index: 1 ; /* Placer le logo derrière le contenu */
-    pointer-events: none; /* Permettre les clics à travers le logo */
+    opacity: 5;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .add-conversation-button {
@@ -139,21 +142,21 @@ body {
 .message.user {
     text-align: right;
     background-color: #e0f7fa;
-    margin-left: 600px; /* Réduire l'espace vide à gauche pour les questions */
+    margin-left: 600px;
     font-weight: bold;
     font-style: normal;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
     position: relative;
-    transform: translateX(-50px); /* Déplacer l'ensemble vers la gauche */
+    transform: translateX(-50px);
 }
 
 .message.user::after {
     content: "🙋";
     position: absolute;
     top: 50%;
-    right: -60px;
+    right: -60px; /* Déplacer l'émoji plus loin à droite */
     transform: translateY(-50%);
     background-color: #e0f7fa;
     border-radius: 50%;
@@ -165,7 +168,7 @@ body {
 .message.bot {
     text-align: left;
     background-color: #f1f8e9;
-    margin-right: 200px; /* Réduire l'espace vide à droite pour les réponses */
+    margin-right: 200px;
     line-height: 1.2;
     font-weight: bold;
     font-style: normal;
@@ -173,14 +176,14 @@ body {
     border-radius: 8px;
     border: 1px solid #ddd;
     position: relative;
-    transform: translateX(50px); /* Déplacer l'ensemble vers la droite */
+    transform: translateX(50px);
 }
 
 .message.bot::after {
     content: "🤖";
     position: absolute;
     top: 50%;
-    left: -55px;
+    left: -60px; /* Déplacer l'émoji plus loin à gauche */
     transform: translateY(-50%);
     background-color: #f1f8e9;
     border-radius: 50%;
@@ -229,16 +232,16 @@ body {
 }
 
 .dark-mode {
-    background-color: #000; /* Changer le fond du body en noir pour le mode sombre */
+    background-color: #000;
     color: #fff;
 }
 
 .dark-mode .chat-container {
-    background-color: #333; /* Changer le fond de l'application en gris */
+    background-color: #333;
 }
 
 .dark-mode .chat-messages {
-    background-color: #333; /* Changer le fond des messages en gris */
+    background-color: #333;
 }
 
 .dark-mode .message.user {
@@ -255,22 +258,125 @@ body {
 .dark-mode .dark-mode-toggle,
 .dark-mode .chat-input label,
 .dark-mode .chat-input button {
-    background-color: #444; /* Changer le fond des boutons en gris */
+    background-color: #444;
     color: #fff;
 }
 
 .dark-mode .add-conversation-button:hover,
 .dark-mode .dark-mode-toggle:hover,
 .dark-mode .chat-input button:hover {
-    background-color: #555; /* Changer le fond des boutons au survol en gris plus clair */
+    background-color: #555;
 }
 
 .dark-mode .dark-mode-toggle-outside {
-    background-color: #fff; /* Changer le fond du bouton en mode sombre */
-    color: #000; /* Changer la couleur du texte en mode sombre */
-    border: 1px solid #ccc; /* Ajouter une bordure en mode sombre */
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
 }
 
 .dark-mode .dark-mode-toggle-outside:hover {
-    background-color: #f0f0f0; /* Changer le fond du bouton au survol en mode sombre */
+    background-color: #f0f0f0;
+}
+
+/* Media Queries pour la réactivité */
+@media (max-width: 1024px) {
+    .chat-container {
+        flex-direction: column; /* Disposition en colonne pour les écrans moyens */
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .chat-content {
+        width: 100%;
+    }
+
+    .message.user {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .message.bot {
+        margin-right: 0;
+        transform: translateX(0);
+    }
+
+    .message.user::after {
+        right: -30px;
+    }
+
+    .message.bot::after {
+        left: -30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        flex-direction: column; /* Disposition en colonne pour les petits écrans */
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .chat-content {
+        width: 100%;
+    }
+
+    .message.user {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .message.bot {
+        margin-right: 0;
+        transform: translateX(0);
+    }
+
+    .message.user::after {
+        right: -20px;
+    }
+
+    .message.bot::after {
+        left: -20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-container {
+        flex-direction: column; /* Disposition en colonne pour les très petits écrans */
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .chat-content {
+        width: 100%;
+    }
+
+    .message.user {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .message.bot {
+        margin-right: 0;
+        transform: translateX(0);
+    }
+
+    .message.user::after {
+        right: -10px;
+    }
+
+    .message.bot::after {
+        left: -10px;
+    }
 }
