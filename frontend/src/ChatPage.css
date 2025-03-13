@@ -159,6 +159,7 @@ body {
     border-radius: 50%;
     padding: 10px;
     font-size: 30px; /* Augmenter la taille de l'émoji */
+    border: 2px solid #007bff; /* Ajouter une bordure au cercle */
 }
 
 .message.bot {
@@ -185,6 +186,7 @@ body {
     border-radius: 50%;
     padding: 10px;
     font-size: 28px; /* Augmenter la taille de l'émoji */
+    border: 2px solid #007bff; /* Ajouter une bordure au cercle */
 }
 
 .chat-input {
