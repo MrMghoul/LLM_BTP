@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # Charger la clé API OpenAI depuis les variables d'environnement
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-MAX_HISTORY_LENGTH = 10000
+MAX_HISTORY_LENGTH = 100
 
 # Initialiser le modèle OpenAI
 llm = ChatOpenAI(
@@ -59,6 +59,27 @@ async def ask_question(query: str, history: str) -> str:
     
     return response_text
 
+async def summarize_history(history: str) -> str:
+    """
+    Génère un résumé de l'historique pour réduire sa taille.
+    
+    :param history: L'historique des messages précédents.
+    :return: Un résumé de l'historique.
+    """
+    messages = [
+        SystemMessage(content="Vous êtes un assistant qui résume des textes en gardant les information les plus importante."),
+        HumanMessage(content=f"Résumé cet historique: {history}")
+    ]
+    
+    logger.info(f"Envoyer au LLM pour résumé: {messages}")
+    
+    response = await llm.agenerate([messages])
+    summary = response.generations[0][0].text
+    
+    logger.info(f"Résumé de l'historique: {summary}")
+    
+    return summary
+
 async def generate_response(query: str, documents: list, history: str, folder_chunks: list) -> str:
     """
     Génère une réponse à partir du LLM en utilisant la requête, les documents fournis et les chunks de fichier.
@@ -71,7 +92,8 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
     """
 
     if len(history) > MAX_HISTORY_LENGTH:
-        history = history[-MAX_HISTORY_LENGTH:]
+        #history = history[-MAX_HISTORY_LENGTH:]
+        history = await summarize_history(history)
 
     context = "\n\n".join([doc["content"] for doc in documents])
     metadata = "\n\n".join([str(doc["file_name"]) for doc in documents])
@@ -106,14 +128,14 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
     # Loguer les messages envoyés au LLM
     logger.info(f"Envoyer au LLM: {messages}")
     print('/n/n')
-    # # logger.info(f"Contexte: {context}")
-    # # print('/n/n')
-    # logger.info(f"Métadonnées: {metadata}")
-    # print('/n/n')
-    # logger.info(f"Pages: {page}")
-    # print('/n/n')
-    # logger.info(f"History: {history_sw}")
-    # print('/n/n')
+    logger.info(f"Contexte: {context}")
+    print('/n/n')
+    logger.info(f"Métadonnées: {metadata}")
+    print('/n/n')
+    logger.info(f"Pages: {page}")
+    print('/n/n')
+    logger.info(f"History: {history}")
+    print('/n/n')
     logger.info(f"folder_chunks: {folder_chunks}")
     print('/n/n')
     logger.info(f"Query: {query_sw}")

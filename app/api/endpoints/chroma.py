@@ -3,7 +3,7 @@ import shutil
 from fastapi import APIRouter, File, UploadFile
 from pydantic import BaseModel
 from app.utils.file_processing import process_file
-from app.services.chroma_service import add_document_chunk, search_documents, store_document_chunks
+from app.services.chroma_service import add_document_chunk, search_documents, search_documents_ranking, store_document_chunks
 
  
 router = APIRouter()
@@ -44,4 +44,10 @@ def add_document(chunk: DocumentChunk):
 def search(query: str = None):
     """Endpoint pour rechercher un document dans ChromaDB."""
     results = search_documents(query)
+    return {"results": results}
+
+@router.get("/search_ranking/")
+def search_ranking(query: str = None):
+    """Endpoint pour rechercher un document dans ChromaDB."""
+    results = search_documents_ranking(query)
     return {"results": results}
