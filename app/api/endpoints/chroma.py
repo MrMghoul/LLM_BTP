@@ -30,7 +30,7 @@ async def upload_document(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
 
     # Traitement et stockage dans ChromaDB
-    stored_chunks = store_document_chunks(file_path)
+    stored_chunks = store_document_chunks(file_path) # la fonction qui sort les chunks du fichier
 
     return {"message": "Document ajouté", "chunks": stored_chunks}
 

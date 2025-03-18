@@ -2,10 +2,10 @@ from app.core.database import database
 from app.core.config import MONGO_COLLECTION_NAME
 from bson import ObjectId
 
+
 # Récupérer la collection "documents"
 collection = database[MONGO_COLLECTION_NAME]
 conversation_collection = database["conversations"]
-
 
 async def get_all_documents():
     """Récupère tous les documents de la collection."""
@@ -19,6 +19,9 @@ async def insert_document(document):
     """Insère un document dans la collection."""
     result = await collection.insert_one(document)
     return str(result.inserted_id)
+
+# Fonctions pour gérer les conversations
+conversation_collection = database["conversations"]
 
 async def get_all_conversations():
     """Récupère toutes les conversations."""
