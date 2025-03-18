@@ -1,0 +1,420 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #8a8888;
+}
+
+.file-name {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+  }
+  
+.logo-light {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 130px; /* Ajuster la position à gauche */
+    width: 350px; /* Augmenter la taille selon vos besoins */
+    height: 250px; /* Augmenter la taille selon vos besoins */
+    background: url('./logo.png') no-repeat center center;
+    background-size: contain;
+    opacity: 5;
+    pointer-events: none;
+}
+
+.logo-dark {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 150px; /* Ajuster la position à gauche */
+    width: 300px; /* Augmenter la taille selon vos besoins */
+    height: 200px; /* Augmenter la taille selon vos besoins */
+    background: url('./logo-white.png') no-repeat center center;
+    background-size: contain;
+    opacity: 5;
+    pointer-events: none;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 95vh;
+    padding: 20px;
+    position: relative; /* Ajouté pour positionner les logos */
+}
+
+
+.dark-mode-toggle-outside {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.dark-mode-toggle-outside:hover {
+    background-color: #0056b3;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: row; /* Par défaut, disposition en ligne pour les grands écrans */
+    max-width: 1600px;
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.sidebar {
+    width: 250px; /* Largeur fixe pour les grands écrans */
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    position: relative;
+}
+
+.add-conversation-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.add-conversation-button:hover {
+    background-color: #0056b3;
+}
+
+.conversation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.conversation-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.conversation-item:hover {
+    background-color: #f0f0f0;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    float: right;
+}
+
+.chat-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.chat-header {
+    margin-bottom: 20px;
+}
+
+.chat-messages {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.message.user {
+    text-align: right;
+    background-color: #e0f7fa;
+    margin-left: 600px;
+    font-weight: bold;
+    font-style: normal;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    position: relative;
+    transform: translateX(-50px);
+}
+
+.message.user::after {
+    content: "🙋";
+    position: absolute;
+    top: 50%;
+    right: -60px; /* Déplacer l'émoji plus loin à droite */
+    transform: translateY(-50%);
+    background-color: #e0f7fa;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 30px; /* Augmenter la taille de l'émoji */
+    border: 2px solid #007bff; /* Ajouter une bordure au cercle */
+}
+
+.message.bot {
+    text-align: left;
+    background-color: #f1f8e9;
+    margin-right: 200px;
+    line-height: 1.2;
+    font-weight: bold;
+    font-style: normal;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    position: relative;
+    transform: translateX(50px);
+}
+
+.message.bot::after {
+    content: "🤖";
+    position: absolute;
+    top: 50%;
+    left: -60px; /* Déplacer l'émoji plus loin à gauche */
+    transform: translateY(-50%);
+    background-color: #f1f8e9;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 28px; /* Augmenter la taille de l'émoji */
+    border: 2px solid #007bff; /* Ajouter une bordure au cercle */
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.chat-input input[type="file"] {
+    display: none;
+}
+
+.chat-input label {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+}
+
+.dark-mode {
+    background-color: #000;
+    color: #fff;
+}
+
+.dark-mode .chat-container {
+    background-color: #333;
+}
+
+.dark-mode .chat-messages {
+    background-color: #333;
+}
+
+.dark-mode .message.user {
+    background-color: #444;
+    border-color: #555;
+}
+
+.dark-mode .message.bot {
+    background-color: #555;
+    border-color: #666;
+}
+
+.dark-mode .add-conversation-button,
+.dark-mode .dark-mode-toggle,
+.dark-mode .chat-input label,
+.dark-mode .chat-input button {
+    background-color: #444;
+    color: #fff;
+}
+
+.dark-mode .add-conversation-button:hover,
+.dark-mode .dark-mode-toggle:hover,
+.dark-mode .chat-input button:hover {
+    background-color: #555;
+}
+
+.dark-mode .dark-mode-toggle-outside {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+}
+
+.dark-mode .dark-mode-toggle-outside:hover {
+    background-color: #f0f0f0;
+}
+
+/* Media Queries pour la réactivité */
+@media (max-width: 1024px) {
+    .chat-container {
+        flex-direction: column; /* Disposition en colonne pour les écrans moyens */
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        margin-top: 20px; /* Ajouter un espace entre le logo et la barre latérale */
+    }
+
+    .chat-content {
+        width: 100%;
+    }
+
+    .message.user {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .message.bot {
+        margin-right: 0;
+        transform: translateX(0);
+    }
+
+    .message.user::after {
+        right: -30px;
+    }
+
+    .message.bot::after {
+        left: -30px;
+    }
+
+    .logo-light, .logo-dark {
+        top: 10px;
+        left: 10px;
+        width: 200px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        flex-direction: column; /* Disposition en colonne pour les petits écrans */
+        margin-top: 60px; /* Ajouter une marge en haut */
+    }
+
+    .sidebar {
+        width: 94%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        margin-top: 4%; /* Ajouter un espace entre le logo et la barre latérale */
+    }
+
+    .chat-content {
+        width: 100%;
+    }
+
+    .message.user {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .message.bot {
+        margin-right: 0;
+        transform: translateX(0);
+    }
+
+    .message.user::after {
+        right: -20px;
+    }
+
+    .message.bot::after {
+        left: -20px;
+    }
+
+    .logo-light, .logo-dark {
+        top: 5px;
+        left: 5px;
+        width: 150px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-container {
+        flex-direction: column; /* Disposition en colonne pour les très petits écrans */
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        margin-top: 20px; /* Ajouter un espace entre le logo et la barre latérale */
+    }
+
+    .chat-content {
+        width: 100%;
+    }
+
+    .message.user {
+        margin-left: 0;
+        transform: translateX(0);
+    }
+
+    .message.bot {
+        margin-right: 0;
+        transform: translateX(0);
+    }
+
+    .message.user::after {
+        right: -10px;
+    }
+
+    .message.bot::after {
+        left: -10px;
+    }
+
+    .logo-light, .logo-dark {
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 75px;
+    }
+}
