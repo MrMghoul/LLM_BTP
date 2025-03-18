@@ -6,10 +6,9 @@ __pycache__/
 test/
 envllm/
 uploads/
-node_module/
 # Front end 
+/node_module/
 
-# Front end 
 /app/node_modules
 # dependencies
 frontend/node_modules
