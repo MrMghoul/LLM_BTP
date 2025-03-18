@@ -34,6 +34,7 @@ const ChatPage = () => {
         formData.append('file', file);
       }
 
+      
       console.log('Sending query to API:', query);
       console.log('Sending history to API:', messages);
       if (file) {
