@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # Charger la clé API OpenAI depuis les variables d'environnement
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-MAX_HISTORY_LENGTH = 100
+MAX_HISTORY_LENGTH = 10000
 
 # Initialiser le modèle OpenAI
 llm = ChatOpenAI(
@@ -112,8 +112,8 @@ async def generate_response(query: str, documents: list, history: str) -> str:
     
     messages = [
         SystemMessage(content="Vous êtes un assistant utile et concis."),
-        SystemMessage(content=history),
-        SystemMessage(content=context),
+        SystemMessage(content=f"Voici l'historique de la conversation: {history}"),
+        SystemMessage(content=f"Voici les document les plus pertinent retenue par rapport a la demande de l'utilisateur : {context}"),
         SystemMessage(content=f"Voici les nom des fichiers : {metadata}"),
         SystemMessage(content=f"Voici les Pages mentionnée : {page}"),
         HumanMessage(content=query)
