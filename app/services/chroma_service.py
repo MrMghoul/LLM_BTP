@@ -9,6 +9,11 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertForSequenceClassification.from_pretrained('bert-base-uncased')
 model.eval()
 
+
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = BertForSequenceClassification.from_pretrained('bert-base-uncased')
+model.eval()
+
 def store_document_chunks(file_path: str):
     """
     Traite un document, extrait ses chunks et les stocke dans ChromaDB.
@@ -25,11 +30,7 @@ def store_document_chunks(file_path: str):
     # Ajouter les chunks à ChromaDB
     for chunk in chunks:
         # Vérifier si le chunk existe déjà dans la base de données
-        existing_chunks = chroma_db.similarity_search(chunk["chunk"], k=1)
-        if existing_chunks and existing_chunks[0].page_content == chunk["chunk"]:
-            # Supprimer le chunk existant
-            chroma_db.delete_text(existing_chunks[0].id)
-
+        
         metadata = {
             "file_name": chunk["file_name"],
             "pages": chunk["pages"],
@@ -79,8 +80,7 @@ def search_documents(query: str = None, top_k: int = 4):
              "page": doc.metadata["pages"],
              "timestamp": doc.metadata["timestamp"],
              "content": doc.page_content} for doc in results]
-
-
+    
 def rank_chunks(query, chunks):
     """
     Utilise BERT pour classer les chunks en fonction de la pertinence par rapport à la requête.

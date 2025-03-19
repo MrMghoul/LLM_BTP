@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.services.mongo_service import get_all_conversations, insert_conversation, update_conversation, delete_conversation
+from bson import ObjectId
 
 router = APIRouter()
 
@@ -24,6 +25,8 @@ async def add_conversation(conversation: Conversation):
 @router.put("/conversations/{conversation_id}")
 async def update_conversation_endpoint(conversation_id: str, conversation: Conversation):
     """Met à jour une conversation."""
+    if not ObjectId.is_valid(conversation_id):
+        raise HTTPException(status_code=400, detail="Invalid conversation ID")
     await update_conversation(conversation_id, conversation.dict())
     return {"message": "Conversation mise à jour"}
 
