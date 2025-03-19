@@ -6,7 +6,7 @@ __pycache__/
 test/
 envllm/
 uploads/
-node_module/
+/node_module/
 # Front end 
 
 # Front end 
