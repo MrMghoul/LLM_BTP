@@ -33,6 +33,9 @@ const ChatPage = () => {
       if (file) {
         formData.append('file', file);
       }
+      if (selectedConversation && selectedConversation.id) {
+        formData.append('conversation_id', selectedConversation.id);
+      }
 
       
       console.log('Sending query to API:', query);

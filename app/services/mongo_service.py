@@ -45,3 +45,48 @@ async def delete_conversation(conversation_id):
     """Supprime une conversation de la collection."""
     result = await conversation_collection.delete_one({"_id": ObjectId(conversation_id)})
     return result.deleted_count 
+
+async def find_conversation_by_history(history: str):
+    """
+    Recherche une conversation existante en fonction de la requête.
+    
+    :param query: La requête de l'utilisateur.
+    :return: La conversation trouvée ou None.
+    """
+    conversation = await conversation_collection.find_one({"Messages": history})
+    return conversation
+
+async def update_uploaded_chunks(conversation_id, new_chunks):
+    """
+    Met à jour les chunks uploadés dans une conversation.
+    
+    :param conversation_id: ID de la conversation.
+    :param new_chunks: Liste des nouveaux chunks à ajouter.
+    :return: Nombre de documents modifiés.
+    """
+    conversation = await conversation_collection.find_one({"_id": ObjectId(conversation_id)})
+    if not conversation:
+        raise ValueError("Conversation introuvable.")
+
+    # Récupérer les chunks existants et ajouter les nouveaux
+    existing_chunks = conversation.get("uploaded_chunks", [])
+    updated_chunks = existing_chunks + new_chunks
+
+    result = await conversation_collection.update_one(
+        {"_id": ObjectId(conversation_id)},
+        {"$set": {"uploaded_chunks": updated_chunks}}
+    )
+    return result.modified_count
+
+
+async def get_uploaded_chunks(conversation_id):
+    """
+    Récupère les chunks uploadés pour une conversation.
+    
+    :param conversation_id: ID de la conversation.
+    :return: Liste des chunks uploadés.
+    """
+    conversation = await conversation_collection.find_one({"_id": ObjectId(conversation_id)})
+    if not conversation:
+        raise ValueError("Conversation introuvable.")
+    return conversation.get("uploaded_chunks", [])

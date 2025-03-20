@@ -46,6 +46,15 @@ def all_documents():
     results = get_all_documents()
     return {"results": results}
 
+@router.delete("/delete_all_documents/")
+def delete_all_documents():
+    """
+    Endpoint pour supprimer tous les documents de la collection ChromaDB.
+    """
+    from app.services.chroma_service import delete_all_documents_in_collection
+    delete_all_documents_in_collection()
+    return {"message": "Tous les documents ont été supprimés de la collection."}
+
 
 @router.get("/search/")
 def search(query: str = None):
