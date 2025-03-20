@@ -4,9 +4,11 @@ from fastapi import APIRouter, HTTPException, File, UploadFile, Request
 from pydantic import BaseModel
 from app.services.chroma_service import search_documents
 from app.services.llm_service import ask_question, generate_response, summarize_history
+from app.services.mongo_service import find_conversation_by_history, insert_conversation
 from app.utils.file_processing import process_file
 from app.services.chroma_service import store_document_chunks
 from fastapi import Form
+from bson import ObjectId
 
 router = APIRouter()
 
@@ -23,10 +25,22 @@ async def summarize_history_endpoint(request: HistoryRequest):
     return {"summary": summary}
 
 @router.post("/chat/")
-async def chat(request: Request, query: str = Form(...), history: str = Form(...), file: UploadFile = File(None)):
+async def chat(request: Request, query: str = Form(...), history: str = Form(...), file: UploadFile = File(None), conversation_id: str = Form(None)):
     """
     Endpoint pour interroger le LLM avec une question et obtenir une réponse.
     """
+    
+    # # Si aucun conversation_id n'est fourni, créer une nouvelle conversation
+    # if not conversation_id:
+    #     conversation_data = {
+    #         "query": query,
+    #         "response": "",
+    #         "messages": [],  # Initialiser les messages comme une liste vide
+    #     }
+    #     conversation_id = await insert_conversation(conversation_data)
+
+
+
     # Rechercher les documents dans ChromaDB
     documents = search_documents(query)
     
@@ -49,7 +63,7 @@ async def chat(request: Request, query: str = Form(...), history: str = Form(...
         folder_chunks = [{"file_name": chunk["file_name"], "chunk": chunk["chunk"]} for chunk in chunks]
     
     # Générer une réponse à partir du LLM
-    response = await generate_response(query, documents, history, folder_chunks)
+    response = await generate_response(query, documents, history, folder_chunks, conversation_id)
     
     return {"query": query, "response": response}
 
