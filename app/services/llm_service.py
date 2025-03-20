@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # Charger la clé API OpenAI depuis les variables d'environnement
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-MAX_HISTORY_LENGTH = 10000
+MAX_HISTORY_LENGTH = 5000
 
 # Initialiser le modèle OpenAI
 llm = ChatOpenAI(
@@ -127,6 +127,7 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
     context = "\n\n".join([doc["content"] for doc in documents])
     metadata = "\n\n".join([str(doc["file_name"]) for doc in documents])
     page = "\n\n".join([str(doc["page"]) for doc in documents])
+    chunks_id = "\n\n".join([str(doc["chunk_id"]) for doc in documents])
 
     history_sw = remove_stopwords(history)
     query_sw = remove_stopwords(query)
@@ -142,7 +143,8 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
         SystemMessage(content=f"Voici l'historique de la conversation: {history}"),
         SystemMessage(content=f"Voici les documents en rapport avec la demande de l'utilisateur: {context}"),
         SystemMessage(content=f"Le nom des fichiers: {metadata}"),
-        SystemMessage(content=f"Pages: {page}"),
+        SystemMessage(content=f"Voici les Pages respectives des chunks: {page}"),
+        SystemMessage(content=f"Voici les IDs respectifs des chunks: {chunks_id}"),
         SystemMessage(content=f"Voici le document uploadé: {folder_chunks}"),
         SystemMessage(content=f"Voici la demande de l'utilisateur: {query}"),
     ]
@@ -160,6 +162,8 @@ async def generate_response(query: str, documents: list, history: str, folder_ch
     logger.info(f"Métadonnées: {metadata}")
     print('/n/n')
     logger.info(f"Pages: {page}")
+    print('/n/n')
+    logger.info(f"IDs des chunks: {chunks_id}")
     print('/n/n')
     logger.info(f"History: {history}")
     print('/n/n')

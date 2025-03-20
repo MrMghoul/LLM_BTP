@@ -35,6 +35,7 @@ def store_document_chunks(file_path: str):
             "file_name": chunk["file_name"],
             "pages": chunk["pages"],
             "timestamp": chunk["timestamp"],
+            "chunk_id": chunk["chunk_id"],
             "chunk": chunk["chunk"],
             #"vector": chunk["vector"]  # On stocke aussi le vecteur
         }
@@ -52,6 +53,7 @@ def get_all_documents():
     return [{"file_name": doc.metadata["file_name"], 
              "page": doc.metadata["pages"],
              "timestamp": doc.metadata["timestamp"],
+             "chunk_id" : doc.metadata["chunk_id"],
              "content": doc.page_content} for doc in results]
 
 def add_document_chunk(file_name: str, page: str, chunk_text: str):
@@ -79,7 +81,26 @@ def search_documents(query: str = None, top_k: int = 4):
     return [{"file_name": doc.metadata["file_name"], 
              "page": doc.metadata["pages"],
              "timestamp": doc.metadata["timestamp"],
+             "chunk_id" : doc.metadata["chunk_id"],
              "content": doc.page_content} for doc in results]
+
+def delete_all_documents_in_collection():
+    """
+    Supprime tous les documents présents dans la collection ChromaDB sans supprimer la collection elle-même.
+    """
+    try:
+        # Récupère tous les IDs des documents stockés
+        all_docs = chroma_db.get()
+        doc_ids = all_docs.get("ids", [])
+
+        if doc_ids:
+            chroma_db.delete(ids=doc_ids)  # Supprime tous les documents avec leurs IDs
+            chroma_db.persist()  # Sauvegarde les changements
+            print("Tous les documents ont été supprimés de la collection.")
+        else:
+            print("Aucun document trouvé à supprimer.")
+    except Exception as e:
+        print(f"Erreur lors de la suppression des documents : {e}")
     
 def rank_chunks(query, chunks):
     """

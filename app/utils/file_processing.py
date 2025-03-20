@@ -112,6 +112,7 @@ def process_word_file(file_path):
         overlap = 50
         timestamp = datetime.datetime.now().isoformat()
         file_name = os.path.basename(file_path)
+        chunks_id_counter = 1
 
         for word in words:
             current_chunk.append(word)
@@ -120,8 +121,10 @@ def process_word_file(file_path):
                     "file_name": file_name,
                     "pages": "Non trouvé",  # Par défaut pour les fichiers Word
                     "timestamp": timestamp,
+                    "chunk_id": chunks_id_counter,
                     "chunk": ' '.join(current_chunk)
                 })
+                chunks_id_counter += 1
                 current_chunk = current_chunk[-overlap:]  # Conserver les 50 derniers mots
 
         # Ajouter le dernier chunk s'il contient des mots
@@ -130,6 +133,7 @@ def process_word_file(file_path):
                 "file_name": file_name,
                 "pages": "Non trouvé",  # Par défaut pour les fichiers Word
                 "timestamp": timestamp,
+                "chunk_id": chunks_id_counter,
                 "chunk": ' '.join(current_chunk)
             })
 
@@ -199,6 +203,7 @@ def process_pdf_file(file_path):
         overlap = 50
         timestamp = datetime.datetime.now().isoformat()
         file_name = os.path.basename(file_path)
+        chunks_id_counter = 1
 
         for page_num, page in enumerate(doc, start=1):
             text = page.get_text("text")
@@ -212,8 +217,10 @@ def process_pdf_file(file_path):
                         "file_name": file_name,
                         "pages": f"{current_page}-{page_num}" if current_page != page_num else str(page_num),
                         "timestamp": timestamp,
+                        "chunk_id": chunks_id_counter,
                         "chunk": ' '.join(current_chunk)
                     })
+                    chunks_id_counter += 1
                     current_chunk = current_chunk[-overlap:]  # Conserver les 50 derniers mots
                     current_page = page_num
 
@@ -223,6 +230,7 @@ def process_pdf_file(file_path):
                 "file_name": file_name,
                 "pages": f"{current_page}-{page_num}" if current_page != page_num else str(page_num),
                 "timestamp": timestamp,
+                "chunk_id": chunks_id_counter,
                 "chunk": ' '.join(current_chunk)
             })
 
@@ -316,6 +324,7 @@ def process_excel_file(file_name):
         chunks = []
         timestamp = datetime.datetime.now().isoformat()
         file_name = os.path.basename(file_name)
+        chunks_id_counter = 1
 
         for sheet_name, sheet_data in data.items():
             # Nettoyer les données
@@ -332,9 +341,11 @@ def process_excel_file(file_name):
                 "file_name": file_name,
                 "pages": sheet_name,
                 "timestamp": timestamp,
+                "chunk_id": chunks_id_counter,
                 "chunk": chunk_text,
                 
             })
+            chunks_id_counter += 1
 
         chunk_texts = [chunk["chunk"] for chunk in chunks]
         vectors = vectorize_chunks(chunk_texts)
