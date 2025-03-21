@@ -78,4 +78,3 @@ async def ask(request: QueryRequest):
     response = await ask_question(query)
     
     return {"question": query, "response": response}
-
