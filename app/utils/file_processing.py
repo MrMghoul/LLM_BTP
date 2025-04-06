@@ -15,11 +15,8 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
-
-#######################################################
-
-
-def divide_text_by_min_words(text, min_words=100, overlap=50):
+# Fonction pour diviser le texte en morceaux de taille minimale avec chevauchement
+def divide_text_by_min_words(text, min_words=250, overlap=50):
     """
     Divise le texte en morceaux contenant au moins un nombre minimum de mots,
     avec un chevauchement pour conserver le contexte.
@@ -41,11 +38,12 @@ def divide_text_by_min_words(text, min_words=100, overlap=50):
 
     return chunks
 
+# Fonction pour vectoriser les chunks de texte
 def vectorize_chunks(chunks):
     """
     Vectorise les chunks de texte en utilisant langchain.
     
-    :param chunks: Une liste de morceaux de texte.
+    :parametre chunks: Une liste de morceaux de texte.
     :return: Une liste de vecteurs.
     """
     model_name = "sentence-transformers/all-mpnet-base-v2"
@@ -53,6 +51,7 @@ def vectorize_chunks(chunks):
     vectors = embeddings.embed_documents(chunks)
     return vectors
 
+# Fonction pour nettoyer le texte et supprimer les séquences inutiles
 def filter_unnecessary_sequences(text):
     """
     Filtre les séquences inutiles du texte.
@@ -64,13 +63,12 @@ def filter_unnecessary_sequences(text):
     text = re.sub(r'\.{3,}', '', text)
     return text
 
+# Fonction pour traiter les fichiers Word
 def process_word_file(file_path):
     """
     Traite un fichier Word et le divise en morceaux de texte basés sur les paragraphes.
     Détecte également les images et les inclut dans les chunks.
-    
-    :param file_path: Le chemin du fichier Word.
-    :return: Une liste de morceaux de texte avec des informations sur le fichier.
+
     """
     try:
         doc = Document(file_path)
@@ -149,12 +147,11 @@ def process_word_file(file_path):
         logger.error(f"Error processing Word file: {e}")
         raise
 
+# Fonction pour traiter les fichiers .doc
 def process_doc_file(file_path):
     """
-    Traite un fichier Word .doc en le convertissant en .docx, puis le divise en morceaux de texte.
-    
-    :param file_path: Le chemin du fichier Word .doc.
-    :return: Une liste de morceaux de texte avec des informations sur le fichier.
+    Traite un fichier Word .doc en le convertissant en .docx,
+    puis le divise en morceaux de texte.
     """
     try:
         logger.info(f"Starting to process DOC file: {file_path}")
@@ -186,13 +183,10 @@ def process_doc_file(file_path):
         logger.error(f"Error processing DOC file: {e}")
         raise
 
-
+# Fonction pour traiter les fichiers PDF
 def process_pdf_file(file_path):
     """
     Traite un fichier PDF et le divise en morceaux de texte basés sur les paragraphes.
-    
-    :param file_path: Le chemin du fichier PDF.
-    :return: Une liste de morceaux de texte avec des informations sur le fichier et les pages.
     """
     try:
         doc = fitz.open(file_path)
@@ -246,7 +240,7 @@ def process_pdf_file(file_path):
         logger.error(f"Error processing PDF file: {e}")
         raise
 
-
+# Fonction pour charger un fichier Excel avec openpyxl
 def load_excel_with_hidden_content(file_name):
     """
     Charge un fichier Excel en incluant les contenus masqués.
@@ -274,16 +268,11 @@ def load_excel_with_hidden_content(file_name):
         return data
     except Exception as e:
         raise ValueError(f"Erreur lors du chargement du fichier Excel : {e}")
-
+    
+# Fonction pour nettoyer les données extraites sur excel
 def clean_data(data):
     """
     Nettoie les données extraites, supprime les lignes vides et normalise.
-
-    Args:
-        data (list): Liste de lignes extraites d'une feuille Excel.
-
-    Returns:
-        list: Données nettoyées.
     """
     cleaned_data = []
     for row in data:
@@ -291,15 +280,10 @@ def clean_data(data):
             cleaned_data.append([str(cell).strip() if cell else "" for cell in row])
     return cleaned_data
 
+# Fonction pour vectoriser les données sur excel (chunk)
 def vectorize_page(page_data):
     """
     Vectorise les données d'une page (chunk).
-
-    Args:
-        page_data (list): Données de la page.
-
-    Returns:
-        list: Embedding vectorisé pour la page.
     """
     text = " ".join([" ".join(map(str, row)) for row in page_data])
     model_name = "sentence-transformers/all-mpnet-base-v2"
@@ -307,15 +291,10 @@ def vectorize_page(page_data):
     embedding = embeddings.embed_documents([text])
     return embedding.tolist()  # Convertir en liste Python
 
+# Fonction pour traiter les fichiers Excel
 def process_excel_file(file_name):
     """
     Traite un fichier Excel et génère un chunk par page (feuille).
-
-    Args:
-        file_name (str): Nom du fichier Excel.
-
-    Returns:
-        dict: Données traitées avec les embeddings.
     """
     try:
         # Charger tout le contenu, y compris les données masquées
@@ -357,6 +336,7 @@ def process_excel_file(file_name):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+# Fonction principale pour traiter les fichiers
 def process_file(file_path):
     """
     Traite un fichier en fonction de son type et le divise en morceaux de texte.

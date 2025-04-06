@@ -34,6 +34,30 @@ async def upload_document(file: UploadFile = File(...)):
 
     return {"message": "Document ajouté", "chunks": stored_chunks}
 
+@router.post("/upload_folder/")
+async def upload_folder(folder_path: str):
+    """
+    Upload tous les fichiers d'un dossier, les traite et stocke leurs chunks dans ChromaDB.
+    """
+    if not os.path.isdir(folder_path):
+        return {"error": "Le chemin spécifié n'est pas un dossier valide."}
+
+    processed_files = []
+    for file_name in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file_name)
+
+        # Vérifier si c'est un fichier
+        if os.path.isfile(file_path):
+            try:
+                # Traiter le fichier et stocker les chunks dans ChromaDB
+                chunks = process_file(file_path)
+                store_document_chunks(file_path)  # Stockage des chunks dans ChromaDB
+                processed_files.append({"file_name": file_name, "status": "success", "chunks": chunks})
+            except Exception as e:
+                processed_files.append({"file_name": file_name, "status": "error", "message": str(e)})
+
+    return {"message": "Traitement terminé", "processed_files": processed_files}
+
 @router.post("/add_document/")
 def add_document(chunk: DocumentChunk):
     """Endpoint pour ajouter un chunk de document dans ChromaDB."""
