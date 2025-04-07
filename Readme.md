@@ -37,12 +37,18 @@ Une fois les conteneurs démarrés, les services seront accessibles :
 - Swagger (documentation API) : http://localhost:8000/docs
 
 PS : Le lancement de l'image du backend au début peut prendre du temps
-
-PS : Il faut ajouter les document car la base de donnee chromadb est en local (gratuit, voir plus sur le rapport)
+PS : Il faut ajouter les document car la base de donnee chromadb est en local (gratuit, voir plus sur le rapport) sinon le chat ne marchera pas
 
 ## Ajouter des données dans ChromaDB
 -  Ajouter un fichier unique
-Vous pouvez ajouter un fichier unique à ChromaDB en utilisant l'endpoint /api/chroma/upload_document/
+    - soit en utilisant swagger : 
+        Vous pouvez ajouter un fichier unique à ChromaDB en utilisant l'endpoint /api/chroma/upload_document/
+
+    - soit en utiliser le curl avec le terminal : 
+        '''bash
+            curl -X POST "http://127.0.0.1:8000/api/chroma/upload_document/" \
+            -F "file=@/Users/I753051/Documents/LLM_BTP/file_path"
+     '''
 
 -  Ajouter un dossier complet
 Pour ajouter tous les fichiers d'un dossier, utilisez l'endpoint /api/chroma/upload_folder/
