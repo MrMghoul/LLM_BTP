@@ -3,13 +3,17 @@ import fitz  # PyMuPDF
 import logging
 import re
 import os
-import win32com.client as win32
+#import win32com.client as win32
 from langchain_community.embeddings import HuggingFaceEmbeddings
 import datetime
 import subprocess
 import openpyxl
 from sentence_transformers import SentenceTransformer
 import numpy as np
+import platform
+
+if platform.system() == "Windows":
+    import win32com.client as win32
 
 
 logger = logging.getLogger(__name__)

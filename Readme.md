@@ -6,58 +6,71 @@ Ce projet est une application basée sur FastAPI et React qui permet d'interagir
 Le fichier .env est utilisé pour configurer les variables d'environnement nécessaires à l'application. Voici un exemple de contenu pour le fichier .env :
 
 ### MongoDB
+```bash
 MONGO_URI=mongodb://mongodb:27017
 MONGO_DB_NAME=llm_project
 MONGO_COLLECTION_NAME=documents
-
+```
 ### OpenAI API Key
+```bash
 OPENAI_API_KEY=your_openai_api_key
+```
 
 ### ChromaDB Path
+```bash
 CHROMA_PATH=./chroma_db
-
-MONGO_URI : L'URI de connexion à MongoDB.
-MONGO_DB_NAME : Le nom de la base de données MongoDB.
-MONGO_COLLECTION_NAME : Le nom de la collection MongoDB.
-OPENAI_API_KEY : Votre clé API OpenAI pour interagir avec le modèle GPT.
-CHROMA_PATH : Le chemin où les données de ChromaDB seront stockées.
+```
+- MONGO_URI : L'URI de connexion à MongoDB.
+- MONGO_DB_NAME : Le nom de la base de données MongoDB.
+- MONGO_COLLECTION_NAME : Le nom de la collection MongoDB.
+- OPENAI_API_KEY : Votre clé API OpenAI pour interagir avec le modèle GPT.
+- CHROMA_PATH : Le chemin où les données de ChromaDB seront stockées.
 
 ## Lancer l'application
 Utilisez la commande suivante pour démarrer les conteneurs Docker :
-    docker-compose up --build
-
+```bash
+docker-compose up --build
+```
 Une fois les conteneurs démarrés, les services seront accessibles :
 
-Frontend : http://localhost:3000
-Swagger (documentation API) : http://localhost:8000/docs
+- Frontend : http://localhost:3000
+- Swagger (documentation API) : http://localhost:8000/docs
+
+PS : Le lancement de l'image du backend au début peut prendre du temps
+
+PS : Il faut ajouter les document car la base de donnee chromadb est en local (gratuit, voir plus sur le rapport)
 
 ## Ajouter des données dans ChromaDB
-a. Ajouter un fichier unique
+-  Ajouter un fichier unique
 Vous pouvez ajouter un fichier unique à ChromaDB en utilisant l'endpoint /api/chroma/upload_document/
 
-b. Ajouter un dossier complet
+-  Ajouter un dossier complet
 Pour ajouter tous les fichiers d'un dossier, utilisez l'endpoint /api/chroma/upload_folder/
 
-Remarque si vous voulez ajouter un document ".doc" il faut decommenter la dependence pywin32 (sans docker). 
+#### Remarque si vous voulez ajouter un document ".doc" il faut decommenter la dependence pywin32 (sans docker). 
 
 ## Structure du Projet
-Backend : Situé dans le dossier app/, il contient les endpoints FastAPI et les services.
-Frontend : Situé dans le dossier frontend/, il contient l'application React.
-ChromaDB : Les données vectorielles sont stockées dans le dossier chroma_db/.
+- Backend : Situé dans le dossier app/, il contient les endpoints FastAPI et les services.
+- Frontend : Situé dans le dossier frontend/, il contient l'application React.
+- ChromaDB : Les données vectorielles sont stockées dans le dossier chroma_db/.
 
 ## Installation environnement via github (sans docker) :
 
-dans le LLM_projet : 
+Dans le LLM_projet : 
+```bash
     python -m venv envllm 
     envllm\Scripts\activate
     pip install -r requirements.txt
-
+```
 lancer le Backend : 
+```bash
     uvicorn app.main:app --reload
-
+```
 lancer le front : 
-    aller sur le dossier frontend
-    et faite la commande suivante : npm start
-
-swagger : 
+```bash
+    # Aller sur le dossier frontend  et faite la commande suivante 
+    npm start
+```
+swagger :
+``` bash 
     http://127.0.0.1:8000/docs

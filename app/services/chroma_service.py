@@ -6,7 +6,7 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 
 
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', timeout = 120)
 model = BertForSequenceClassification.from_pretrained('bert-base-uncased')
 model.eval()
 

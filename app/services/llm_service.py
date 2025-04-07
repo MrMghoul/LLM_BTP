@@ -6,6 +6,7 @@ from langchain.chains import LLMChain
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import SystemMessage, HumanMessage
 import nltk
+print(nltk.data.path)
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -13,9 +14,20 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from app.services.mongo_service import get_uploaded_chunks, update_uploaded_chunks
 
+# Définir le chemin des données NLTK
+nltk_data_path = "/root/nltk_data"
+if not os.path.exists(nltk_data_path):
+    os.makedirs(nltk_data_path)
+nltk.data.path.append(nltk_data_path)
+
+# Télécharger les ressources nécessaires
+nltk.download('punkt', download_dir=nltk_data_path)
+nltk.download('stopwords', download_dir=nltk_data_path)
+nltk.download('punkt_tab')
+
 #Biblioteque pour le traitement de texte stopwords
-nltk.download('stopwords')
-nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('punkt')
 
 # Configure the logger
 logging.basicConfig(level=logging.INFO)

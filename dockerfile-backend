@@ -8,6 +8,11 @@ WORKDIR /src
 COPY requirements.txt .
 RUN pip install  -r requirements.txt
 
+# Télécharger les ressources NLTK nécessaires
+RUN python -m nltk.downloader punkt
+RUN python -m nltk.downloader stopwords
+
+
 # Copy the rest of the application
 COPY app ./app
 COPY .env .

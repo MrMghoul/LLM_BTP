@@ -6,18 +6,17 @@ pydantic==2.8.2
 motor==3.3.1
 pymongo==4.6.1
 spacy==3.8.3
-chromadb==0.3.22
+chromadb==0.6.3
 python-docx==0.8.11
 PyMuPDF==1.25.2
 python-multipart==0.0.5
-#pywin32==308 Compatible que sur windows pour les fichier .doc 
+#pywin32==308 Compatible que sur windows pour les fichier .doc (faudra le mettre pour traite les fichier .doc)
 langchain_community==0.3.17
-pydantic-settings == 2.7.1
-python-docx == 0.8.11
-langchain-openai == 0.3.6
+pydantic-settings==2.7.1
+langchain-openai==0.3.6
 langchain-huggingface==0.1.2 #0.2.2
 openpyxl==3.1.5 
 nltk==3.9.1 
-transformers==4.40.0 #4.31.0
+transformers==4.48.1 #4.31.0
 torch==2.6.0  #2.0.1
 
